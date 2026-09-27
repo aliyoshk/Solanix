@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">My Application</string>
+
+    <string name= "stay_on_top_of_everything"> Stay on top of everything. </string>
+    <string name = "task_flow_practical_app">TaskFlow practical app</string>
+    <string name = "review_project_brief"> Review project brief </string>
+    <string name ="prepare_presentation">Prepare presentation</string>
+    <string name="get_started">Get Started</string>
+    <string name="today">TODAY\'S PROGRESS</string>>
+</resources>
