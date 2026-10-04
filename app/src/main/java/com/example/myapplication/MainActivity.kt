@@ -49,9 +49,10 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     topBar = { TopBarUI(title = "Analytics") }
                 ) { innerPadding ->
-                    ScreenContent(
-                        modifier = Modifier.padding(innerPadding)
-                    )
+                    ProfileScreen()
+//                    ScreenContent(
+//                        modifier = Modifier.padding(innerPadding)
+//                    )
                 }
             }
         }
