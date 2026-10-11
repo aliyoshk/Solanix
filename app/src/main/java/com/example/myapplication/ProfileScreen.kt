@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -26,6 +27,7 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -35,6 +37,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -47,17 +50,23 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
+import com.example.myapplication.navigation.AppNavRoutes
+import com.example.myapplication.navigation.CustomerScreen
+import com.example.myapplication.navigation.ProfileScreen
+import com.example.myapplication.navigation.WelcomeScreen
 
 @Composable
-fun ProfileScreen() {
+fun ProfileScreen(navigation: NavController) {
     Scaffold(
-        modifier = Modifier
-            .fillMaxWidth()
+        modifier = Modifier.fillMaxWidth()
     ) { innerPadding ->
         var anotherText = ""
 
-        var text by remember { mutableStateOf("") }
-        var buttonClickCount by remember { mutableStateOf(0) }
+        var text by rememberSaveable { mutableStateOf("") }
+        var buttonClickCount by rememberSaveable { mutableStateOf(0) }
+        var textValue by remember { mutableStateOf("") }
 
         Column(
             modifier = Modifier
@@ -136,13 +145,28 @@ fun ProfileScreen() {
                 Spacer(Modifier.height(12.dp))
 
                 Button(
-                    onClick = { buttonClickCount++ }
+                    onClick = {
+                        buttonClickCount++
+                        navigation.navigate(CustomerScreen(name = textValue, age = text))
+                    }
                 ) {
                     Log.d("ProfileScreen", "Button click count equal $buttonClickCount")
                     Text(
                         text = if (buttonClickCount == 1) "Log In" else "Log Out"
                     )
                 }
+
+                Spacer(Modifier.height(12.dp))
+
+                TextFieldsSamples(
+                    textValue = textValue,
+                    onTextChange = { newValue ->
+                        textValue = newValue
+                    },
+                    onPlusButtonClick = {
+                        navigation.navigate(WelcomeScreen)
+                    }
+                )
 
                 Spacer(Modifier.height(12.dp))
 
@@ -228,10 +252,52 @@ fun ButtonSamples() {
     }
 }
 
+@Composable
+fun TextFieldsSamples(
+    textValue: String = "",
+    onTextChange: (String) -> Unit,
+    onPlusButtonClick: () -> Unit
+) {
+    Column(Modifier.padding(20.dp)) {
+
+        //filled textinput component //
+        TextField(
+            value = textValue,
+            onValueChange = { onTextChange(it) },
+            label = { Text("Name") },
+            placeholder = { Text("Enter your name") },
+            trailingIcon = {
+                Icon(
+                    modifier = Modifier.clickable(
+                        onClick = {onPlusButtonClick()}
+                    ),
+                    painter = painterResource(id = R.drawable.add),
+                    contentDescription = "Icon"
+                )
+            },
+            leadingIcon = {
+                Icon(
+                    painter = painterResource(id = R.drawable.add),
+                    contentDescription = "Icon"
+                )
+            }
+        )
+
+        Spacer(Modifier.height(30.dp))
+
+        Text("Name")
+        OutlinedTextField(
+            value = "",
+            onValueChange = {},
+            placeholder = { Text("Enter your name") },
+        )
+    }
+}
+
 
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun ProfileScreenPreview() {
-    ProfileScreen()
+    ProfileScreen(navigation = rememberNavController())
 }

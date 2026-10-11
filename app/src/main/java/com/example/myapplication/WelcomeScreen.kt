@@ -20,7 +20,9 @@ import androidx.compose.ui.unit.dp
 
 
 @Composable
-fun WelcomeScreen() {
+fun WelcomeScreen(
+    onClick: () -> Unit
+) {
     Scaffold(
         modifier = Modifier.fillMaxWidth(),
         topBar = {
@@ -60,7 +62,7 @@ fun WelcomeScreen() {
             Button(
                 modifier = Modifier
                     .fillMaxWidth(),
-                onClick = {},
+                onClick = { onClick() },
                 colors = ButtonColors(
                     containerColor = colorResource(R.color.dark_purple),
                     contentColor = colorResource(R.color.white),
@@ -94,6 +96,6 @@ fun TaskFlowCard(text: String) {
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun WelcomeScreenPreview() {
-    WelcomeScreen()
+    WelcomeScreen({})
 }
 
