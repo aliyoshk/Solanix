@@ -1,6 +1,7 @@
 package com.example.myapplication
 
-import android.widget.Button
+import android.content.Context
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -16,28 +17,71 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextFieldColors
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.preferencesDataStore
+import androidx.navigation.NavController
+import com.example.myapplication.navigation.HomeScreen
+import kotlinx.coroutines.launch
 
 
 @Composable
-fun LoginScreen() {
-    Scaffold() { innerPadding ->
-        LoginUI(modifier = Modifier.padding(innerPadding))
+fun LoginScreen(navController: NavController) {
+    Scaffold(
+    ) { innerPadding ->
+        val context = LocalContext.current
+        val dataStoreManager = remember { DataStoreManager(context) }
+        val scope = rememberCoroutineScope()
+
+        val savedUsername = dataStoreManager.username.collectAsState("")
+
+        Log.d("Saved Username", "${savedUsername.value}")
+
+        var username by rememberSaveable { mutableStateOf<String?>(null) }
+        var password by rememberSaveable { mutableStateOf("") }
+
+        LoginUI(
+            modifier = Modifier.padding(innerPadding),
+            userName = username ?: savedUsername.value.toString(),
+            onUsernameChange = { username = it },
+            password = password,
+            onPasswordChange = { password = it },
+            onButtonClick = {
+                scope.launch {
+                    dataStoreManager.saveLogin(username ?: "", password)
+                    Log.d("Saved Username", "Username saved: $username")
+                }
+                navController.navigate(HomeScreen)
+            }
+        )
     }
 }
 
 
 @Composable
 fun LoginUI(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    userName: String,
+    onUsernameChange: (String) -> Unit,
+    password: String,
+    onPasswordChange: (String) -> Unit,
+    onButtonClick: () -> Unit = {}
 ) {
     Column(
         modifier = modifier
@@ -83,8 +127,8 @@ fun LoginUI(
         )
 
         AppInputField(
-            value = "",
-            onValueChange = {},
+            value = userName,
+            onValueChange = onUsernameChange,
         )
 
         Spacer(Modifier.height(18.dp))
@@ -98,14 +142,14 @@ fun LoginUI(
         )
 
         AppInputField(
-            value = "",
-            onValueChange = {},
+            value = password,
+            onValueChange = onPasswordChange,
         )
 
         Spacer(Modifier.height(36.dp))
 
         Button(
-            onClick = {},
+            onClick = onButtonClick,
             modifier = Modifier.fillMaxWidth()
         ) {
             Text("Sign in")
@@ -136,20 +180,9 @@ fun AppInputField(
 
 @Composable
 @Preview(showBackground = true, showSystemUi = true)
-fun AppInputFieldPreview() {
-    Column(
-        modifier = Modifier
-            .padding(50.dp)
-            .fillMaxWidth()
-
-    ) {
-        AppInputField()
-    }
-}
-
-
-@Composable
-@Preview(showBackground = true, showSystemUi = true)
 fun LoginUIPreview() {
-    LoginUI()
+    LoginUI(
+        userName = "", onUsernameChange = {},
+        password = "", onPasswordChange = {}
+    )
 }

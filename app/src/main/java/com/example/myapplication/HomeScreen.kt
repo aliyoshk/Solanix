@@ -13,28 +13,53 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import kotlinx.coroutines.launch
 
 
 @Composable
 fun HomeScreen() {
     Scaffold() { innerPadding ->
-        HomeUI(modifier = Modifier.padding(innerPadding))
+        val context = LocalContext.current
+        val dataStoreManager = remember { DataStoreManager(context) }
+        val scope = rememberCoroutineScope()
+
+        val savedUsername = dataStoreManager.username.collectAsState("")
+        val password = dataStoreManager.password.collectAsState("")
+
+
+        HomeUI(
+            modifier = Modifier.padding(innerPadding),
+            name = "Username: ${savedUsername.value.toString()} - Password ${password.value.toString()}",
+            onLogout = {
+                scope.launch {
+                    dataStoreManager.deleteLogin()
+                }
+            }
+        )
     }
 }
 
 
 @Composable
 fun HomeUI(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    name: String,
+    onLogout: () -> Unit = {}
 ) {
     Column(
         modifier = modifier
@@ -42,16 +67,26 @@ fun HomeUI(
             .padding(16.dp)
             .verticalScroll(rememberScrollState())
     ) {
-        Text(
-            text = "ShopStock",
-            fontWeight = FontWeight.Bold,
-            fontSize = 18.sp
-        )
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = "ShopStock",
+                fontWeight = FontWeight.Bold,
+                fontSize = 18.sp
+            )
+
+            Button(onClick = onLogout) {
+                Text("Logout")
+            }
+        }
 
         Spacer(Modifier.height(15.dp))
 
         Text(
-            text = "Good morning, Aliyu",
+            text = "Good morning, $name",
             fontWeight = FontWeight.Bold,
             fontSize = 18.sp
         )
@@ -240,5 +275,5 @@ fun RecentItemCard(
 @Composable
 @Preview(showBackground = true, showSystemUi = true)
 fun HomeUIPreview() {
-    HomeUI()
+    HomeUI(name = "Aliyu")
 }
