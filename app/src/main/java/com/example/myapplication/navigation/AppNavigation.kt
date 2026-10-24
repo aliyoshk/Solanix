@@ -10,7 +10,9 @@ import com.example.myapplication.CustomerScreenScreen
 import com.example.myapplication.HomeScreen
 import com.example.myapplication.LoginScreen
 import com.example.myapplication.ProfileScreen
+import com.example.myapplication.RegistrationScreen
 import com.example.myapplication.WelcomeScreen
+import com.example.myapplication.RegisteredUsersScreen
 import kotlinx.serialization.Serializable
 
 
@@ -21,7 +23,7 @@ fun AppNavigation(
 ) {
     NavHost(
         navController = navController,
-        startDestination = if (isUserLoggedIn) HomeScreen else LoginScreen
+        startDestination = RegistrationScreen
     ) {
         composable<WelcomeScreen> {
             WelcomeScreen(
@@ -40,6 +42,12 @@ fun AppNavigation(
         }
         composable<HomeScreen> {
             HomeScreen()
+        }
+        composable<RegistrationScreen> {
+            RegistrationScreen(navController = navController)
+        }
+        composable<RegisteredUsersScreen> {
+            RegisteredUsersScreen(navController = navController)
         }
     }
 }
@@ -66,3 +74,9 @@ object LoginScreen
 
 @Serializable
 object HomeScreen
+
+@Serializable
+object RegistrationScreen
+
+@Serializable
+object RegisteredUsersScreen

@@ -1,6 +1,7 @@
 package com.example.myapplication
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -38,12 +39,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.room.Room
 import com.example.myapplication.navigation.AppNavHost
 import com.example.myapplication.navigation.AppNavigation
 import com.example.myapplication.ui.theme.MyApplicationTheme
 
 class MainActivity : ComponentActivity() {
-    @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -51,26 +52,23 @@ class MainActivity : ComponentActivity() {
         setContent {
             val context = LocalContext.current
             val dataStoreManager = remember { DataStoreManager(context) }
+            val db = Room.databaseBuilder(context, AppDatabase::class.java, "app.db").build()
 
             val isUserLoggedIn by dataStoreManager.isLoggedIn.collectAsState(false)
-
-
 
             MyApplicationTheme {
                 Scaffold(
                     modifier = Modifier.fillMaxSize(),
                     topBar = { TopBarUI(title = "Analytics") }
                 ) { innerPadding ->
-                    AppNavigation(isUserLoggedIn = isUserLoggedIn == true)
-//                    ScreenContent(
-//                        modifier = Modifier.padding(innerPadding)
-//                    )
+                    Box(modifier = Modifier.padding(innerPadding)) {
+                        AppNavigation(isUserLoggedIn = isUserLoggedIn == true)
+                    }
                 }
             }
         }
     }
 }
-
 
 @Composable
 fun ScreenContent(modifier: Modifier = Modifier) {

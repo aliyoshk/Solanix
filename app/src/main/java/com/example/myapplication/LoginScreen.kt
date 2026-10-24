@@ -1,8 +1,8 @@
 package com.example.myapplication
 
-import android.content.Context
 import android.util.Log
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -37,7 +37,10 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.navigation.NavController
+import androidx.room.Room
 import com.example.myapplication.navigation.HomeScreen
+import com.example.myapplication.navigation.RegisteredUsersScreen
+import com.example.myapplication.navigation.RegistrationScreen
 import kotlinx.coroutines.launch
 
 
@@ -47,6 +50,7 @@ fun LoginScreen(navController: NavController) {
     ) { innerPadding ->
         val context = LocalContext.current
         val dataStoreManager = remember { DataStoreManager(context) }
+        val db = Room.databaseBuilder(context, AppDatabase::class.java, "app.db").build()
         val scope = rememberCoroutineScope()
 
         val savedUsername = dataStoreManager.username.collectAsState("")
@@ -62,12 +66,19 @@ fun LoginScreen(navController: NavController) {
             onUsernameChange = { username = it },
             password = password,
             onPasswordChange = { password = it },
+            onRegisterClick = { navController.navigate(RegistrationScreen) },
             onButtonClick = {
                 scope.launch {
-                    dataStoreManager.saveLogin(username ?: "", password)
-                    Log.d("Saved Username", "Username saved: $username")
+//                    dataStoreManager.saveLogin(username ?: "", password)
+//                    Log.d("Saved Username", "Username saved: $username")
+
+                    val user = db.userDao().login(username ?: "", password)
+                    if (user != null) {
+                        navController.navigate(RegisteredUsersScreen)
+                    } else {
+                        Log.d("Login", "Invalid credentials for user: $username")
+                    }
                 }
-                navController.navigate(HomeScreen)
             }
         )
     }
@@ -81,6 +92,7 @@ fun LoginUI(
     onUsernameChange: (String) -> Unit,
     password: String,
     onPasswordChange: (String) -> Unit,
+    onRegisterClick: () -> Unit = {},
     onButtonClick: () -> Unit = {}
 ) {
     Column(
@@ -158,7 +170,8 @@ fun LoginUI(
         Spacer(Modifier.height(30.dp))
 
         Text(
-            text = "Works offline. Data syncs when online.",
+            modifier = Modifier.clickable(onClick = { onRegisterClick() }),
+            text = "Don't have an account? Register",
             fontSize = 12.sp,
             fontWeight = FontWeight.Bold,
             color = Color(0xFF16A34A)
