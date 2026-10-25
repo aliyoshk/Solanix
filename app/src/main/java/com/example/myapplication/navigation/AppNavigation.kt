@@ -8,11 +8,11 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.example.myapplication.CustomerScreenScreen
 import com.example.myapplication.HomeScreen
-import com.example.myapplication.LoginScreen
+import com.example.myapplication.onboarding.LoginScreen
 import com.example.myapplication.ProfileScreen
-import com.example.myapplication.RegistrationScreen
+import com.example.myapplication.onboarding.RegistrationScreen
 import com.example.myapplication.WelcomeScreen
-import com.example.myapplication.RegisteredUsersScreen
+import com.example.myapplication.onboarding.RegisteredUsersScreen
 import kotlinx.serialization.Serializable
 
 

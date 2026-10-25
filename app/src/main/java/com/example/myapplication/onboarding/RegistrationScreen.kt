@@ -1,7 +1,6 @@
-package com.example.myapplication
+package com.example.myapplication.onboarding
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -27,8 +26,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.room.Room
+import com.example.myapplication.AppDatabase
+import com.example.myapplication.UserEntity
 import com.example.myapplication.navigation.LoginScreen
 import kotlinx.coroutines.launch
 
@@ -39,7 +43,15 @@ fun RegistrationScreen(
 ) {
     val context = LocalContext.current
     val db = Room.databaseBuilder(context, AppDatabase::class.java, "app.db").build()
-    val scope = rememberCoroutineScope()
+//    val scope = rememberCoroutineScope()
+
+    val viewModel: OnboardingViewModel = viewModel(
+        factory = object : ViewModelProvider.Factory {
+            override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                return OnboardingViewModel(db.userDao()) as T
+            }
+        }
+    )
 
     var name by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
@@ -57,11 +69,15 @@ fun RegistrationScreen(
             password = password,
             onPasswordChange = { password = it },
             onRegisterClick = {
-                scope.launch {
-                    val user = UserEntity(name = name, email = email, password = password)
-                    db.userDao().register(user)
+                val user = UserEntity(name = name, email = email, password = password)
+                viewModel.onRegister(user) {
                     navController.navigate(LoginScreen)
                 }
+//                scope.launch {
+//                    val user = UserEntity(name = name, email = email, password = password)
+//                    db.userDao().register(user)
+//                    navController.navigate(LoginScreen)
+//                }
             },
             onLogin = { navController.navigate(LoginScreen) }
         )

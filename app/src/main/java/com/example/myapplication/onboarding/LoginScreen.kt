@@ -1,4 +1,4 @@
-package com.example.myapplication
+package com.example.myapplication.onboarding
 
 import android.util.Log
 import androidx.compose.foundation.background
@@ -33,12 +33,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.preferencesDataStore
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.room.Room
-import com.example.myapplication.navigation.HomeScreen
+import com.example.myapplication.AppDatabase
+import com.example.myapplication.DataStoreManager
 import com.example.myapplication.navigation.RegisteredUsersScreen
 import com.example.myapplication.navigation.RegistrationScreen
 import kotlinx.coroutines.launch
@@ -49,36 +50,49 @@ fun LoginScreen(navController: NavController) {
     Scaffold(
     ) { innerPadding ->
         val context = LocalContext.current
-        val dataStoreManager = remember { DataStoreManager(context) }
+//        val dataStoreManager = remember { DataStoreManager(context) }
         val db = Room.databaseBuilder(context, AppDatabase::class.java, "app.db").build()
-        val scope = rememberCoroutineScope()
+//        val scope = rememberCoroutineScope()
 
-        val savedUsername = dataStoreManager.username.collectAsState("")
+//        val savedUsername = dataStoreManager.username.collectAsState("")
 
-        Log.d("Saved Username", "${savedUsername.value}")
+        val viewModel: OnboardingViewModel = viewModel(
+            factory = object : ViewModelProvider.Factory {
+                override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                    return OnboardingViewModel(db.userDao()) as T
+                }
+            }
+        )
+
+
 
         var username by rememberSaveable { mutableStateOf<String?>(null) }
         var password by rememberSaveable { mutableStateOf("") }
 
         LoginUI(
             modifier = Modifier.padding(innerPadding),
-            userName = username ?: savedUsername.value.toString(),
+            userName = username ?: "",
             onUsernameChange = { username = it },
             password = password,
             onPasswordChange = { password = it },
             onRegisterClick = { navController.navigate(RegistrationScreen) },
             onButtonClick = {
-                scope.launch {
-//                    dataStoreManager.saveLogin(username ?: "", password)
-//                    Log.d("Saved Username", "Username saved: $username")
-
-                    val user = db.userDao().login(username ?: "", password)
-                    if (user != null) {
-                        navController.navigate(RegisteredUsersScreen)
-                    } else {
-                        Log.d("Login", "Invalid credentials for user: $username")
-                    }
-                }
+                viewModel.onLogin(
+                    email = username ?: "",
+                    password = password,
+                    onSuccess = { navController.navigate(RegisteredUsersScreen) }
+                )
+//                scope.launch {
+////                    dataStoreManager.saveLogin(username ?: "", password)
+////                    Log.d("Saved Username", "Username saved: $username")
+//
+//                    val user = db.userDao().login(username ?: "", password)
+//                    if (user != null) {
+//                        navController.navigate(RegisteredUsersScreen)
+//                    } else {
+//                        Log.d("Login", "Invalid credentials for user: $username")
+//                    }
+//                }
             }
         )
     }
