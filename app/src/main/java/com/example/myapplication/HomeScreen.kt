@@ -40,7 +40,7 @@ fun HomeScreen() {
 
         val savedUsername = dataStoreManager.username.collectAsState("")
         val password = dataStoreManager.password.collectAsState("")
-
+        val isLoggedIn = dataStoreManager.isLoggedIn.collectAsState(false)
 
         HomeUI(
             modifier = Modifier.padding(innerPadding),
