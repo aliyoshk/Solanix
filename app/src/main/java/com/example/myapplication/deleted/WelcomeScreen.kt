@@ -1,4 +1,4 @@
-package com.example.myapplication
+package com.example.myapplication.deleted
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -17,6 +17,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.myapplication.R
 
 
 @Composable
@@ -25,11 +26,6 @@ fun WelcomeScreen(
 ) {
     Scaffold(
         modifier = Modifier.fillMaxWidth(),
-        topBar = {
-            TopBarUI(
-                title = stringResource(R.string.stay_on_top_of_everything),
-            )
-        }
     ) { paddingValues ->
         Column(
             modifier = Modifier

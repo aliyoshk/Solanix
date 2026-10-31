@@ -1,6 +1,5 @@
-package com.example.myapplication.ui.theme
+package com.example.myapplication.presentation.theme
 
-import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
@@ -9,7 +8,15 @@ import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+
+object AppColors {
+    val Primary = Color(0xFF1D4ED8); val PrimarySoft = Color(0xFFDBEAFE); val Navy = Color(0xFF0F2A4A)
+    val Success = Color(0xFF16A34A); val Warning = Color(0xFFB45309); val WarningSoft = Color(0xFFFEF3C7)
+    val Danger = Color(0xFFB91C1C); val Surface = Color(0xFFF1F5F9); val Border = Color(0xFFE2E8F0)
+    val BorderStrong = Color(0xFFCBD5E1); val Text = Color(0xFF0F172A); val Muted = Color(0xFF64748B)
+}
 
 private val DarkColorScheme = darkColorScheme(
     primary = Purple80,

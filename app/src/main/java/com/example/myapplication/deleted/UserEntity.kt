@@ -1,7 +1,6 @@
-package com.example.myapplication
+package com.example.myapplication.deleted
 
 import androidx.room.Entity
-import androidx.room.Index
 import androidx.room.PrimaryKey
 
 

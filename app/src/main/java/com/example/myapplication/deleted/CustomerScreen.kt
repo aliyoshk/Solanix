@@ -1,6 +1,5 @@
-package com.example.myapplication
+package com.example.myapplication.deleted
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -20,13 +19,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.myapplication.R
 
 
 @Composable
 fun CustomerScreenScreen(name: String? = "", age: String? = "") {
     Scaffold(
         modifier = Modifier.fillMaxWidth(),
-        topBar = { TopBarUI("Customers") }
     ) { paddingValue ->
         CustomerScreenUI(
             modifier = Modifier.padding(paddingValue),
