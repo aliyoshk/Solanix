@@ -1,4 +1,4 @@
-package com.example.myapplication.navigation
+package com.example.myapplication.deleted.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
@@ -6,13 +6,13 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
-import com.example.myapplication.CustomerScreenScreen
-import com.example.myapplication.HomeScreen
-import com.example.myapplication.onboarding.LoginScreen
-import com.example.myapplication.ProfileScreen
-import com.example.myapplication.onboarding.RegistrationScreen
-import com.example.myapplication.WelcomeScreen
-import com.example.myapplication.onboarding.RegisteredUsersScreen
+import com.example.myapplication.deleted.CustomerScreenScreen
+import com.example.myapplication.deleted.HomeScreen
+import com.example.myapplication.deleted.onboarding.LoginScreen
+import com.example.myapplication.deleted.ProfileScreen
+import com.example.myapplication.deleted.onboarding.RegistrationScreen
+import com.example.myapplication.deleted.WelcomeScreen
+import com.example.myapplication.deleted.onboarding.RegisteredUsersScreen
 import kotlinx.serialization.Serializable
 
 

@@ -1,4 +1,4 @@
-package com.example.myapplication.navigation
+package com.example.myapplication.deleted.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavType
@@ -6,10 +6,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.example.myapplication.CustomerScreenScreen
-import com.example.myapplication.ProfileScreen
-import com.example.myapplication.WelcomeScreen
-import com.example.myapplication.navigation.AppNavRoutes.WELCOME
+import com.example.myapplication.deleted.CustomerScreenScreen
+import com.example.myapplication.deleted.ProfileScreen
+import com.example.myapplication.deleted.WelcomeScreen
+import com.example.myapplication.deleted.navigation.AppNavRoutes.WELCOME
 
 @Composable
 fun AppNavHost() {

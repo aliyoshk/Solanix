@@ -1,12 +1,12 @@
-package com.example.myapplication.onboarding
+package com.example.myapplication.deleted.onboarding
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.myapplication.UserDao
-import com.example.myapplication.UserEntity
+import com.example.myapplication.deleted.UserDao
+import com.example.myapplication.deleted.UserEntity
 import kotlinx.coroutines.launch
 
 

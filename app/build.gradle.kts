@@ -62,6 +62,9 @@ dependencies {
     ksp(libs.androidx.room.compiler)
     //Coroutine/Flow
     implementation(libs.androidx.room.ktx)
+    //Materials Icon
+    implementation(libs.androidx.compose.material.icons.core)
+    implementation(libs.androidx.compose.material.icons.extended)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
